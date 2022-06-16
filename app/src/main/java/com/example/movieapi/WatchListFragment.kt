@@ -1,5 +1,6 @@
 package com.example.movieapi
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,9 +12,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movieapi.databinding.FragmentWatchlistBinding
 import com.example.movieapi.db.MovieDatabase
+import com.example.movieapi.login.LoginActivity
 import com.example.movieapi.model.WatchLaterAdapter
 import com.example.movieapi.viewModel.DetailViewModel
 import com.example.movieapi.viewModel.MovieViewModelFactory
+import com.google.firebase.auth.FirebaseAuth
 
 class WatchListFragment : Fragment() {
     lateinit var watchLaterAdapter: WatchLaterAdapter
@@ -35,6 +38,11 @@ class WatchListFragment : Fragment() {
         val viewmodel = MovieViewModelFactory(movieDb)
         viewModel = ViewModelProvider(this, viewmodel)[DetailViewModel::class.java]
         watchLaterAdapter= WatchLaterAdapter()
+        binding.logoutbtn.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            startActivity(Intent(requireContext(),LoginActivity::class.java))
+            activity?.finish()
+        }
         setRv()
         observeFavorites()
         setUpClick()
